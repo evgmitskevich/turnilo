@@ -1,0 +1,1148 @@
+port: {SWIV_PORT}
+
+clusters:
+    - name: druid
+    type: druid
+    host: {BROKER_HOST}:{BROKER_PORT}
+    timeout: 900000
+    sourceListScan: disable
+    sourceListRefreshInterval: 15000
+    requestDecorator: './druid-request-decorator.js'
+
+dataCubes:
+  - name: adx_pixels_stats
+    title: adx_pixels_stats
+    clusterName: druid
+    source: adx_pixels_stats
+    refreshRule:
+      rule: query
+    defaultSortMeasure: captures
+    introspection: autofill-all
+    attributeOverrides:
+    dimensions:
+
+      - name: __time
+        title: Time
+        kind: time
+        formula: $__time
+
+      - name: action
+        title: Action
+        formula: $action
+
+      - name: cookie_id
+        title: Cookie Id
+        formula: $cookie_id
+
+      - name: event
+        title: Event
+        formula: $event
+
+      - name: existing_user
+        title: Existing User
+        formula: $existing_user
+
+      - name: node_id
+        title: Node Id
+        formula: $node_id
+
+      - name: node_type
+        title: Node Type
+        formula: $node_type
+
+      - name: pixel_id
+        title: Pixel Id
+        formula: $pixel_id
+
+      - name: value
+        title: Value
+        formula: $value
+    measures:
+
+      - name: captures
+        title: Captures
+        formula: $main.sum($captures)
+
+
+  - name: adx_user_balances
+    title: adx_user_balances
+    clusterName: druid
+    source: adx_user_balances
+    refreshRule:
+      rule: query
+    defaultSortMeasure: balance_real
+    defaultSelectedMeasures:
+      - balance_real
+    introspection: autofill-all
+    attributeOverrides:
+    dimensions:
+
+      - name: __time
+        title: Time
+        kind: time
+        formula: $__time
+
+      - name: user_id
+        title: User Id
+        formula: $user_id
+
+    measures:
+
+      - name: count
+        title: Count
+        formula: $main.sum($count)
+
+      - name: balance
+        title: Balance
+        formula: $main.sum($balance)
+
+      - name: balance_real
+        title: Balance Real
+        formula: $main.sum($balance) / $main.sum($count)
+
+
+  - name: adx_per_user_debug
+    title: adx_per_user_debug
+    clusterName: druid
+    source: adx_per_user_debug
+    refreshRule:
+      rule: query
+    defaultSortMeasure: count
+    introspection: autofill-all
+    attributeOverrides:
+    dimensions:
+
+      - name: __time
+        title: Time
+        kind: time
+        formula: $__time
+
+      - name: cookie_id
+        title: Cookie Id
+        formula: $cookie_id
+
+      - name: targeting_id
+        title: Targeting Id
+        formula: $targeting_id
+
+    measures:
+
+      - name: count
+        title: Count
+        formula: $main.sum($count)
+
+      - name: accepted_clicks
+        title: Accepted Clicks
+        formula: $main.sum($accepted_clicks)
+
+      - name: bids
+        title: Bids
+        formula: $main.sum($bids)
+
+      - name: conversions
+        title: Conversions
+        formula: $main.sum($conversions)
+
+      - name: impressions
+        title: Impressions
+        formula: $main.sum($impressions)
+
+      - name: received_clicks
+        title: Received Clicks
+        formula: $main.sum($received_clicks)
+
+
+  - name: adx_segments_info
+    title: adx_segments_info
+    clusterName: druid
+    source: adx_segments_info
+    refreshRule:
+      rule: query
+    defaultSortMeasure: captures
+    introspection: autofill-all
+    attributeOverrides:
+    dimensions:
+
+      - name: __time
+        title: Time
+        kind: time
+        formula: $__time
+
+      - name: action
+        title: Action
+        formula: $action
+
+      - name: existing_user
+        title: Existing User
+        formula: $existing_user
+
+      - name: file
+        title: File
+        formula: $file
+
+      - name: node_id
+        title: Node Id
+        formula: $node_id
+
+      - name: node_type
+        title: Node Type
+        formula: $node_type
+
+      - name: segment_id
+        title: Segment Id
+        formula: $segment_id
+    measures:
+
+      - name: captures
+        title: Captures
+        formula: $main.sum($captures)
+
+      - name: cookie_id_metric
+        title: Cookie Id Metric
+        formula: $main.countDistinct($cookie_id_metric)
+
+
+  - name: adx_requests
+    title: adx_requests
+    clusterName: druid
+    source: adx_requests
+    refreshRule:
+      rule: query
+    defaultSortMeasure: cookie_id
+    introspection: autofill-all
+    attributeOverrides:
+    dimensions:
+
+      - name: __time
+        title: Time
+        kind: time
+        formula: $__time
+		
+      - name: d1
+        title: D1
+        formula: $d1
+
+      - name: d10
+        title: D10
+        formula: $d10
+
+      - name: d11
+        title: D11
+        formula: $d11
+
+      - name: d12
+        title: D12
+        formula: $d12
+
+      - name: d13
+        title: D13
+        formula: $d13
+
+      - name: d14
+        title: D14
+        formula: $d14
+
+      - name: d15
+        title: D15
+        formula: $d15
+
+      - name: d16
+        title: D16
+        formula: $d16
+
+      - name: d17
+        title: D17
+        formula: $d17
+
+      - name: d18
+        title: D18
+        formula: $d18
+
+      - name: d19
+        title: D19
+        formula: $d19
+
+      - name: d2
+        title: D2
+        formula: $d2
+
+      - name: d20
+        title: D20
+        formula: $d20
+
+      - name: d21
+        title: D21
+        formula: $d21
+
+      - name: d22
+        title: D22
+        formula: $d22
+
+      - name: d23
+        title: D23
+        formula: $d23
+
+      - name: d24
+        title: D24
+        formula: $d24
+
+      - name: d25
+        title: D25
+        formula: $d25
+
+      - name: d26
+        title: D26
+        formula: $d26
+
+      - name: d27
+        title: D27
+        formula: $d27
+
+      - name: d28
+        title: D28
+        formula: $d28
+
+      - name: d29
+        title: D29
+        formula: $d29
+
+      - name: d3
+        title: D3
+        formula: $d3
+
+      - name: d30
+        title: D30
+        formula: $d30
+
+      - name: d31
+        title: D31
+        formula: $d31
+
+      - name: d32
+        title: D32
+        formula: $d32
+
+      - name: d33
+        title: D33
+        formula: $d33
+
+      - name: d34
+        title: D34
+        formula: $d34
+
+      - name: d35
+        title: D35
+        formula: $d35
+
+      - name: d36
+        title: D36
+        formula: $d36
+
+      - name: d37
+        title: D37
+        formula: $d37
+
+      - name: d38
+        title: D38
+        formula: $d38
+
+      - name: d39
+        title: D39
+        formula: $d39
+
+      - name: d4
+        title: D4
+        formula: $d4
+
+      - name: d40
+        title: D40
+        formula: $d40
+
+      - name: d5
+        title: D5
+        formula: $d5
+
+      - name: d6
+        title: D6
+        formula: $d6
+
+      - name: d7
+        title: D7
+        formula: $d7
+
+      - name: d8
+        title: D8
+        formula: $d8
+
+      - name: d9
+        title: D9
+        formula: $d9
+		
+    measures:
+
+      - name: cookie_id
+        title: Cookie Id
+        formula: $main.countDistinct($cookie_id)
+
+      - name: requests
+        title: Requests
+        formula: $main.sum($requests)
+
+
+  - name: adx_reports
+    title: adx_reports
+    clusterName: druid
+    source: adx_reports
+    refreshRule:
+      rule: query
+    defaultSortMeasure: requests
+    introspection: autofill-all
+    defaultSelectedMeasures:
+      - requests
+      - bids
+      - impressions
+      - accepted_clicks
+    attributeOverrides:
+    dimensions:
+
+      - name: __time
+        title: Time
+        kind: time
+        formula: $__time
+
+      - name: adv_bid_price
+        title: Adv Bid Price
+        formula: $adv_bid_price
+
+      - name: adv_subdomain_id
+        title: Adv Subdomain Id
+        formula: $adv_subdomain_id
+
+      - name: adv_subdomain
+        title: Adv Subdomain
+        formula: $adv_subdomain
+
+      - name: advertiser_id
+        title: Advertiser Id
+        formula: $advertiser_id
+
+      - name: agency_id
+        title: Agency Id
+        formula: $agency_id
+
+      - name: bad_click_type
+        title: Bad Click Type
+        formula: $bad_click_type
+
+      - name: bidfloor
+        title: Bidfloor
+        formula: $bidfloor
+
+      - name: browser
+        title: Browser
+        formula: $browser
+
+      - name: bundle
+        title: Bundle
+        formula: $bundle
+
+      - name: campaign_currency
+        title: Campaign Currency
+        formula: $campaign_currency
+
+      - name: campaign_id
+        title: Campaign Id
+        formula: $campaign_id
+
+      - name: carrier
+        title: Carrier
+        formula: $carrier
+
+      - name: city_id
+        title: City Id
+        formula: $city_id
+
+      - name: city
+        title: City
+        formula: $city
+
+      - name: contextual_segments
+        title: Contextual Segments
+        formula: $contextual_segments
+
+      - name: country
+        title: Country
+        formula: $country
+
+      - name: country_region
+        title: Country Region
+        formula: $country_region
+
+      - name: creative_group_id
+        title: Creative Group Id
+        formula: $creative_group_id
+
+      - name: creative_id
+        title: Creative Id
+        formula: $creative_id
+
+      - name: creative_secure_type
+        title: Creative Secure Type
+        formula: $creative_secure_type
+
+      - name: creative_type_id
+        title: Creative Type Id
+        formula: $creative_type_id
+
+      - name: deal_id
+        title: Deal Id
+        formula: $deal_id
+
+      - name: device
+        title: Device
+        formula: $device
+
+      - name: dma
+        title: Dma
+        formula: $dma
+
+      - name: domain
+        title: Domain
+        formula: $domain
+
+      - name: ext_deal_ids
+        title: Ext Deal Ids
+        formula: $ext_deal_ids
+
+      - name: forensiq_score
+        title: Forensiq Score
+        formula: $forensiq_score
+
+      - name: frequency
+        title: Frequency
+        formula: $frequency
+
+      - name: hour
+        title: Hour
+        formula: $hour
+
+      - name: inventory_type
+        title: Inventory Type
+        formula: $inventory_type
+
+      - name: is_in_network
+        title: Is In Network
+        formula: $is_in_network
+
+      - name: is_simple
+        title: Is Simple
+        formula: $is_simple
+
+      - name: keywords
+        title: Keywords
+        formula: $keywords
+
+      - name: metro
+        title: Metro
+        formula: $metro
+
+      - name: os
+        title: Os
+        formula: $os
+
+      - name: placement
+        title: Placement
+        formula: $placement
+
+      - name: parent_ssp_id
+        title: Parent Ssp Id
+        formula: $parent_ssp_id
+
+      - name: personal_seat
+        title: Personal Seat
+        formula: $personal_seat
+
+      - name: product_id
+        title: Product Id
+        formula: $product_id
+
+      - name: pub_bid_price
+        title: Pub Bid Price
+        formula: $pub_bid_price
+
+      - name: pub_subdomain_id
+        title: Pub Subdomain Id
+        formula: $pub_subdomain_id
+
+      - name: pub_subdomain
+        title: Pub Subdomain
+        formula: $pub_subdomain
+
+      - name: publisher_id
+        title: Publisher Id
+        formula: $publisher_id
+
+      - name: record_category
+        title: Record Category
+        formula: $record_category
+
+      - name: region
+        title: Region
+        formula: $region
+
+      - name: reseller_id
+        title: Reseller Id
+        formula: $reseller_id
+
+      - name: root_commission
+        title: Root Commission
+        formula: $root_commission
+
+      - name: rtb_request_bcat
+        title: Rtb Request Bcat
+        formula: $rtb_request_bcat
+
+      - name: rtb_request_device_carrier
+        title: Rtb Request Device Carrier
+        formula: $rtb_request_device_carrier
+
+      - name: rtb_request_device_connectiontype
+        title: Rtb Request Device Connectiontype
+        formula: $rtb_request_device_connectiontype
+
+      - name: rtb_request_site_cat
+        title: Rtb Request Site Cat
+        formula: $rtb_request_site_cat
+
+      - name: site_id
+        title: Site Id
+        formula: $site_id
+
+      - name: size
+        title: Size
+        formula: $size
+
+      - name: ssp_id
+        title: Ssp Id
+        formula: $ssp_id
+
+      - name: ssp
+        title: Ssp
+        formula: $ssp
+
+      - name: supply_type
+        title: Supply Type
+        formula: $supply_type
+
+      - name: system_ip_lists
+        title: System Ip Lists
+        formula: $system_ip_lists
+
+      - name: targeting_id
+        title: Targeting Id
+        formula: $targeting_id
+
+      - name: total_commission
+        title: Total Commission
+        formula: $total_commission
+
+      - name: traffic_channel
+        title: Traffic Channel
+        formula: $traffic_channel
+
+      - name: users_ip_lists
+        title: Users Ip Lists
+        formula: $users_ip_lists
+
+      - name: users_segments
+        title: Users Segments
+        formula: $users_segments
+
+      - name: vast_api
+        title: Vast Api
+        formula: $vast_api
+
+      - name: vast_error_code
+        title: Vast Error Code
+        formula: $vast_error_code
+
+      - name: video_duration_max
+        title: Video Duration Max
+        formula: $video_duration_max
+
+      - name: video_duration_min
+        title: Video Duration Min
+        formula: $video_duration_min
+
+      - name: video_mime
+        title: Video Mime
+        formula: $video_mime
+
+      - name: video_player_options
+        title: Video Player Options
+        formula: $video_player_options
+
+      - name: video_player_size
+        title: Video Player Size
+        formula: $video_player_size
+
+      - name: weekday
+        title: Weekday
+        formula: $weekday
+
+      - name: wrapper_script
+        title: Wrapper Script
+        formula: $wrapper_script
+
+      - name: zone_position
+        title: Zone Position
+        formula: $zone_position
+
+    measures:
+
+      - name: count
+        title: Count
+        formula: $main.sum($count)
+
+      - name: accepted_clicks
+        title: Accepted Clicks
+        formula: $main.sum($accepted_clicks)
+
+      - name: ad_serving_cost
+        title: Ad Serving Cost
+        formula: $main.sum($ad_serving_cost)
+
+      - name: ad_verification_cost
+        title: Ad Verification Cost
+        formula: $main.sum($ad_verification_cost)
+
+      - name: adv_bid_price_metric
+        title: Adv Bid Price Metric
+        formula: $main.sum($adv_bid_price_metric)
+
+      - name: advertiser_spend
+        title: Advertiser Spend
+        formula: $main.sum($advertiser_spend)
+
+      - name: bad_clicks
+        title: Bad Clicks
+        formula: $main.sum($bad_clicks)
+
+      - name: bids
+        title: Bids
+        formula: $main.sum($bids)
+
+      - name: billed_spend
+        title: Billed Spend
+        formula: $main.sum($billed_spend)
+
+      - name: blocked_clicks
+        title: Blocked Clicks
+        formula: $main.sum($blocked_clicks)
+
+      - name: blocked_impressions
+        title: Blocked Impressions
+        formula: $main.sum($blocked_impressions)
+
+      - name: companion_clicks
+        title: Companion Clicks
+        formula: $main.sum($companion_clicks)
+
+      - name: contextual_cost
+        title: Contextual Cost
+        formula: $main.sum($contextual_cost)
+
+      - name: conversions
+        title: Conversions
+        formula: $main.sum($conversions)
+
+      - name: conversions_sum
+        title: Conversions Sum
+        formula: $main.sum($conversions_sum)
+
+      - name: cookie_id
+        title: Cookie Id
+        formula: $main.countDistinct($cookie_id)
+
+      - name: duplicated_impressions
+        title: Duplicated Impressions
+        formula: $main.sum($duplicated_impressions)
+
+      - name: dynamic_creative_cost
+        title: Dynamic Creative Cost
+        formula: $main.sum($dynamic_creative_cost)
+
+      - name: engaged
+        title: Engaged
+        formula: $main.sum($engaged)
+
+      - name: impressions
+        title: Impressions
+        formula: $main.sum($impressions)
+
+      - name: margin_from_advertiser
+        title: Margin From Advertiser
+        formula: $main.sum($margin_from_advertiser)
+
+      - name: margin_from_agency
+        title: Margin From Agency
+        formula: $main.sum($margin_from_agency)
+
+      - name: media_cost
+        title: Media Cost
+        formula: $main.sum($media_cost)
+
+      - name: organization_spend
+        title: Organization Spend
+        formula: $main.sum($organization_spend)
+
+      - name: platform_access_fee
+        title: Platform Access Fee
+        formula: $main.sum($platform_access_fee)
+
+      - name: platform_access_profit
+        title: Platform Access Profit
+        formula: $main.sum($platform_access_profit)
+
+      - name: platform_data_cost
+        title: Platform Data Cost
+        formula: $main.sum($platform_data_cost)
+
+      - name: platform_margin_share
+        title: Platform Margin Share
+        formula: $main.sum($platform_margin_share)
+
+      - name: platform_optimization_fee
+        title: Platform Optimization Fee
+        formula: $main.sum($platform_optimization_fee)
+
+      - name: platform_total_fee
+        title: Platform Total Fee
+        formula: $main.sum($platform_total_fee)
+
+      - name: platform_total_fee_profit
+        title: Platform Total Fee Profit
+        formula: $main.sum($platform_total_fee_profit)
+
+      - name: post_click_conversions
+        title: Post Click Conversions
+        formula: $main.sum($post_click_conversions)
+
+      - name: post_view_conversions
+        title: Post View Conversions
+        formula: $main.sum($post_view_conversions)
+
+      - name: pub_bid_price_metric
+        title: Pub Bid Price Metric
+        formula: $main.sum($pub_bid_price_metric)
+
+      - name: publisher_profit
+        title: Publisher Profit
+        formula: $main.sum($publisher_profit)
+
+      - name: pure_advertiser_admin_profit
+        title: Pure Advertiser Admin Profit
+        formula: $main.sum($pure_advertiser_admin_profit)
+
+      - name: pure_publisher_admin_profit
+        title: Pure Publisher Admin Profit
+        formula: $main.sum($pure_publisher_admin_profit)
+
+      - name: received_clicks
+        title: Received Clicks
+        formula: $main.sum($received_clicks)
+
+      - name: requests
+        title: Requests
+        formula: $main.sum($requests)
+
+      - name: reseller_exchange_commission
+        title: Reseller Exchange Commission
+        formula: $main.sum($reseller_exchange_commission)
+
+      - name: reseller_margin_share
+        title: Reseller Margin Share
+        formula: $main.sum($reseller_margin_share)
+
+      - name: reseller_root_profit_share
+        title: Reseller Root Profit Share
+        formula: $main.sum($reseller_root_profit_share)
+
+      - name: root_profit
+        title: Root Profit
+        formula: $main.sum($root_profit)
+
+      - name: total_ad_cost
+        title: Total Ad Cost
+        formula: $main.sum($total_ad_cost)
+
+      - name: total_conversions
+        title: Total Conversions
+        formula: $main.sum($total_conversions)
+
+      - name: total_margin
+        title: Total Margin
+        formula: $main.sum($total_margin)
+
+      - name: total_spend
+        title: Total Spend
+        formula: $main.sum($total_spend)
+
+      - name: tracked_impressions
+        title: Tracked Impressions
+        formula: $main.sum($tracked_impressions)
+
+      - name: unique_clicks
+        title: Unique Clicks
+        formula: $main.sum($unique_clicks)
+
+      - name: unique_impressions
+        title: Unique Impressions
+        formula: $main.sum($unique_impressions)
+
+      - name: user_data_cost
+        title: User Data Cost
+        formula: $main.sum($user_data_cost)
+
+      - name: vast_acceptInvitationLinear
+        title: Vast Accept Invitation Linear
+        formula: $main.sum($vast_acceptInvitationLinear)
+
+      - name: vast_closeLinear
+        title: Vast Close Linear
+        formula: $main.sum($vast_closeLinear)
+
+      - name: vast_collapse
+        title: Vast Collapse
+        formula: $main.sum($vast_collapse)
+
+      - name: vast_complete
+        title: Vast Complete
+        formula: $main.sum($vast_complete)
+
+      - name: vast_creativeView
+        title: Vast Creative View
+        formula: $main.sum($vast_creativeView)
+
+      - name: vast_error
+        title: Vast Error
+        formula: $main.sum($vast_error)
+
+      - name: vast_exitFullscreen
+        title: Vast Exit Fullscreen
+        formula: $main.sum($vast_exitFullscreen)
+
+      - name: vast_expand
+        title: Vast Expand
+        formula: $main.sum($vast_expand)
+
+      - name: vast_firstQuartile
+        title: Vast First Quartile
+        formula: $main.sum($vast_firstQuartile)
+
+      - name: vast_fullscreen
+        title: Vast Fullscreen
+        formula: $main.sum($vast_fullscreen)
+
+      - name: vast_midpoint
+        title: Vast Midpoint
+        formula: $main.sum($vast_midpoint)
+
+      - name: vast_mute
+        title: Vast Mute
+        formula: $main.sum($vast_mute)
+
+      - name: vast_pause
+        title: Vast Pause
+        formula: $main.sum($vast_pause)
+
+      - name: vast_progress
+        title: Vast Progress
+        formula: $main.sum($vast_progress)
+
+      - name: vast_resume
+        title: Vast Resume
+        formula: $main.sum($vast_resume)
+
+      - name: vast_rewind
+        title: Vast Rewind
+        formula: $main.sum($vast_rewind)
+
+      - name: vast_skip
+        title: Vast Skip
+        formula: $main.sum($vast_skip)
+
+      - name: vast_start
+        title: Vast Start
+        formula: $main.sum($vast_start)
+
+      - name: vast_thirdQuartile
+        title: Vast Third Quartile
+        formula: $main.sum($vast_thirdQuartile)
+
+      - name: vast_unmute
+        title: Vast Unmute
+        formula: $main.sum($vast_unmute)
+
+      - name: viewable_impressions
+        title: Viewable Impressions
+        formula: $main.sum($viewable_impressions)
+		
+		
+      # This is the place where you might want to add derived measures (a.k.a Post Aggregators).
+      #
+      # Here are some examples of possible derived measures:
+      #
+      - name: wins
+        title: Wins
+        formula: $main.sum($impressions) / $main.sum($bids)
+        
+      - name: coverage
+        title: Coverage
+        formula: $main.sum($bids) / $main.sum($requests)
+        
+      - name: ctr
+        title: CTR
+        formula: $main.sum($accepted_clicks) / $main.sum($impressions)
+        
+      - name: ctc
+        title: CTC
+        formula: $main.sum($total_conversions) / $main.sum($accepted_clicks)
+        
+      - name: response_rate
+        title: Response Rate/1K Imps
+        formula: $main.sum($total_conversions) / $main.sum($impressions) * 1000
+        
+      - name: conversion_rate
+        title: Conversion Rate
+        formula: $main.sum($total_conversions) / $main.sum($impressions)
+    
+      - name: platform_total_fee_calculated
+        title: Platform Total Fee
+        formula: $main.sum($platform_margin_share) + $main.sum($platform_access_fee) + $main.sum($platform_optimization_fee)
+
+      - name: completed_rate_100
+        title: 100% Completed Rate
+        formula: $main.sum($vast_complete) / $main.sum($vast_start)
+        
+      - name: completed_rate_75
+        title: 75% Completed Rate
+        formula: $main.sum($vast_thirdQuartile) / $main.sum($vast_start)
+        
+      - name: completed_rate_50
+        title: 50% Completed Rate
+        formula: $main.sum($vast_midpoint) / $main.sum($vast_start)
+        
+      - name: completed_rate_25
+        title: 25% Completed Rate
+        formula: $main.sum($vast_firstQuartile) / $main.sum($vast_start)
+        
+      - name: total_spend_ecpm
+        title: Total Spend eCPM
+        formula: $main.sum($total_spend) / $main.sum($impressions) * 1000
+        
+      - name: total_spend_ecpc
+        title: Total Spend eCPC
+        formula: $main.sum($total_spend) / $main.sum($accepted_clicks)
+        
+      - name: total_spend_ecpa
+        title: Total Spend eCPA
+        formula: $main.sum($total_spend) / $main.sum($total_conversions)
+        
+      - name: total_spend_pc_cpa
+        title: Total Spend PC CPA
+        formula: $main.sum($total_spend) / $main.sum($post_click_conversions)
+        
+      - name: total_spend_pv_cpa
+        title: Total Spend PV CPA
+        formula: $main.sum($total_spend) / $main.sum($post_view_conversions)
+        
+    #  - name: total_spend_roi
+    #  title: Total Spend ROI
+    #    formula: $main.sum($revenue) / $main.sum($total_spend)
+        
+      - name: total_ad_cost_ecpm
+        title: Total Ad Cost eCPM
+        formula: $main.sum($total_ad_cost) / $main.sum($impressions) * 1000
+        
+      - name: total_ad_cost_ecpc
+        title: Total Ad Cost eCPC
+        formula: $main.sum($total_ad_cost) / $main.sum($accepted_clicks)
+        
+      - name: total_ad_cost_ecpa
+        title: Total Ad Cost eCPA
+        formula: $main.sum($total_ad_cost) / $main.sum($total_conversions)
+        
+      - name: total_ad_cost_pc_cpa
+        title: Total Ad Cost PC CPA
+        formula: $main.sum($total_ad_cost) / $main.sum($post_click_conversions)
+        
+      - name: total_ad_cost_pv_cpa
+        title: Total Ad Cost PV CPA
+        formula: $main.sum($total_ad_cost) / $main.sum($post_view_conversions)
+
+    #  - name: total_ad_cost_roi
+    #  title: Total Ad Cost ROI
+    #    formula: $main.sum($revenue) / $main.sum($total_ad_cost)
+        
+      - name: media_cost_ecpm
+        title: Media Cost eCPM
+        formula: $main.sum($media_cost) / $main.sum($impressions) * 1000
+        
+      - name: media_cost_ecpc
+        title: Media Cost eCPC
+        formula: $main.sum($media_cost) / $main.sum($accepted_clicks)
+        
+      - name: media_cost_ecpa
+        title: Media Cost eCPA
+        formula: $main.sum($media_cost) / $main.sum($total_conversions)
+        
+      - name: media_cost_pc_cpa
+        title: Media Cost PC CPA
+        formula: $main.sum($media_cost) / $main.sum($post_click_conversions)
+        
+      - name: media_cost_pv_pca
+        title: Media Cost PV CPA
+        formula: $main.sum($media_cost) / $main.sum($post_view_conversions)
+        
+    #  - name: media_cost_roi
+    #  title: Media Cost ROI
+    #    formula: $main.sum($revenue) / $main.sum($media_cost)
+        
+      - name: roi
+        title: ROI
+        formula: ($main.sum($conversions_sum) - $main.sum($total_spend)) / $main.sum($total_spend)
+        
+    # - name: bad_click_percent
+    #   title: Bad clicks percent
+    #   formula: ($main.sum($bad_clicks) / ($main.sum($bad_clicks) + $main.sum(accepted_clicks))) * 100
+        
+      - name: cpv
+        title: CPV
+        formula: $main.sum($media_cost) / $main.sum($accepted_clicks)
+        
+      - name: cpc
+        title: CPC
+        formula: $main.sum($media_cost) / $main.sum($total_conversions)
+        
+      - name: ecpc
+        title: ECPC
+        formula: $main.sum($publisher_profit) / $main.sum($accepted_clicks)
+        
+      - name: ecpa
+        title: ECPA
+        formula: $main.sum($publisher_profit) * $main.sum($conversions) / $main.sum($accepted_clicks)
+        
+      - name: cvr_percent
+        title: CVR percent
+        formula: $main.sum($conversions) / $main.sum($accepted_clicks) * 100		
+    
+    # traffic_cost = (requests + discarded_requests) x 10^-7
+      - name: traffic_cost 
+        title: Traffic cost
+        formula: ($main.sum($requests) + $main.sum($discarded_requests)) * 0.0000001
+    
+    # outgoing_traffic_cost = outgoing_requests x 10^-7
+      - name: outgoing_traffic_cost
+        title: Outgoing traffic cost
+        formula: $main.sum($outgoing_requests) * 0.0000001

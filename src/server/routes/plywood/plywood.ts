@@ -23,7 +23,12 @@ import { GetSettingsOptions } from "../../utils/settings-manager/settings-manage
 
 let router = Router();
 
+var sessionVars = require('../../utils/session-vars');
+
 router.post("/", (req: SwivRequest, res: Response) => {
+
+  sessionVars.set('X-Client-Domain', req.hostname);
+
   const { dataSource, expression, timezone } = req.body;
   const dataCube = req.body.dataCube || dataSource; // back compat
 

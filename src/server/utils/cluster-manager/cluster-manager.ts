@@ -25,6 +25,8 @@ import { Logger } from "../../../common/logger/logger";
 import { Cluster } from "../../../common/models/cluster/cluster";
 import { properRequesterFactory } from "../requester/requester";
 
+var sessionVars = require('../session-vars');
+
 const CONNECTION_RETRY_TIMEOUT = 20000;
 const DRUID_REQUEST_DECORATOR_MODULE_VERSION = 1;
 
@@ -35,7 +37,7 @@ export interface RequestDecoratorFactoryParams {
 
 export interface DruidRequestDecoratorModule {
   version: number;
-  druidRequestDecoratorFactory: (logger: Logger, params: RequestDecoratorFactoryParams) => DruidRequestDecorator;
+  druidRequestDecoratorFactory: (logger: Logger, params: RequestDecoratorFactoryParams, sessionVars: any) => DruidRequestDecorator;
 }
 
 // For each external we want to maintain its source and weather it should introspect at all
@@ -175,7 +177,7 @@ export class ClusterManager {
       druidRequestDecorator = requestDecoratorModule.druidRequestDecoratorFactory(logger, {
         options: cluster.decoratorOptions,
         cluster
-      });
+      }, sessionVars);
     }
 
     this.requester = properRequesterFactory({

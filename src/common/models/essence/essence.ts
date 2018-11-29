@@ -17,7 +17,9 @@
 
 import { Timezone } from "chronoshift";
 import { List, OrderedSet, Record as ImmutableRecord, Set } from "immutable";
-import { PlywoodRange, Range, RefExpression } from "plywood";
+import { Expression, PlywoodRange, Range, RefExpression } from "plywood";
+import { toExpression as filterClauseToExpression } from "../../../common/models/filter-clause/filter-clause";
+import { concatTruthy } from "../../utils/functional/functional";
 import { visualizationIndependentEvaluator } from "../../utils/rules/visualization-independent-evaluator";
 import { Colors } from "../colors/colors";
 import { DataCube } from "../data-cube/data-cube";
@@ -26,9 +28,10 @@ import { DateRange, FilterClause, FixedTimeFilterClause, isTimeFilter, NumberFil
 import { Filter } from "../filter/filter";
 import { Highlight } from "../highlight/highlight";
 import { Manifest, Resolve } from "../manifest/manifest";
+import { CurrentPeriod, DataSeries, MeasurePercentOf, PreviousPeriod } from "../data-series/data-series";
 import { Measure } from "../measure/measure";
 import { SeriesList } from "../series-list/series-list";
-import { Series } from "../series/series";
+import { PERCENT_FORMAT, Series, SeriesPercents } from "../series/series";
 import { Sort } from "../sort/sort";
 import { Split } from "../split/split";
 import { Splits } from "../splits/splits";
@@ -42,6 +45,11 @@ function constrainDimensions(dimensions: OrderedSet<string>, dataCube: DataCube)
 export interface VisualizationAndResolve {
   visualization: Manifest;
   resolve: Resolve;
+}
+
+export interface PeriodFilters {
+  current: Expression;
+  previous?: Expression;
 }
 
 /**
@@ -334,11 +342,30 @@ export class Essence extends ImmutableRecord<EssenceValue>(defaultEssence) {
     return this.series.series.map(({ reference }) => this.dataCube.getMeasure(reference));
   }
 
-  public getSeriesWithMeasures(): List<SeriesWithMeasure> {
-    return this.series.series.map(series => ({
-      series,
-      measure: this.dataCube.getMeasure(series.reference)
-    }));
+  public getDataSeries(): List<DataSeries> {
+    return this.series.series.flatMap(({ percents: { ofTotal, ofParent }, reference }) => {
+      const measure = this.dataCube.getMeasure(reference);
+      const measureExp = new DataSeries({ measure });
+
+      return concatTruthy(
+        measureExp,
+        ofTotal && measureExp
+          .set("percentOf", MeasurePercentOf.TOTAL)
+          .set("format", PERCENT_FORMAT),
+        ofParent && measureExp
+          .set("percentOf", MeasurePercentOf.PARENT)
+          .set("format", PERCENT_FORMAT)
+      );
+    });
+  }
+
+  public getPeriodFilters(timekeeper: Timekeeper): PeriodFilters {
+    if (!this.hasComparison()) return null;
+    const timeDimension = this.dataCube.getTimeDimension();
+    const current = filterClauseToExpression(this.currentTimeFilter(timekeeper), timeDimension);
+    const previous = filterClauseToExpression(this.previousTimeFilter(timekeeper), timeDimension);
+
+    return { current, previous };
   }
 
   public differentDataCube(other: Essence): boolean {

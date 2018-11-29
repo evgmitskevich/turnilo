@@ -1,7 +1,7 @@
 port: {SWIV_PORT}
 
 clusters:
-    - name: druid
+  - name: druid
     type: druid
     host: {BROKER_HOST}:{BROKER_PORT}
     timeout: 900000

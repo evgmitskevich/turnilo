@@ -23,11 +23,16 @@ import { GetSettingsOptions } from "../../utils/settings-manager/settings-manage
 
 let router = Router();
 
-var sessionVars = require('../../utils/session-vars');
+let sessionVars = require('../../utils/session-vars');
 
 router.post("/", (req: SwivRequest, res: Response) => {
 
-  sessionVars.set('X-Client-Domain', req.hostname);
+  let headers = {};
+    for (let header in req.headers) {
+      // @ts-ignore
+      headers[header] = req.header(header);
+    }
+  sessionVars.set('client-headers', headers);
 
   const { dataSource, expression, timezone } = req.body;
   const dataCube = req.body.dataCube || dataSource; // back compat

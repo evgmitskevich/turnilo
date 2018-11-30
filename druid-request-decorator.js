@@ -3,10 +3,13 @@ exports.version = 1;
 exports.druidRequestDecoratorFactory = function (logger, params, sessionVars) {
   return function (decoratorRequest) {
 
-    var decoration = {
-      headers: {
-        "X-Client-Domain": sessionVars.get("X-Client-Domain")
-      }
+    let clientHeaders = sessionVars.get("client-headers");
+    let headers = {};
+    for (let header in clientHeaders) {
+      headers["X-Client-" + header] = clientHeaders[header];
+    }
+    let decoration = {
+      headers: headers
     };
 
     console.log("Decoration:");
